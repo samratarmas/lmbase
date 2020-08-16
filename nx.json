@@ -15,15 +15,29 @@
   },
   "tasksRunnerOptions": {
     "default": {
-      "runner": "@nrwl/workspace/tasks-runners/default",
+      "runner": "@nrwl/nx-cloud",
       "options": {
-        "cacheableOperations": ["build", "lint", "test", "e2e"]
+        "accessToken": "MzliYWE2ZDYtOGJkNC00MjgyLTllMjEtY2FhNjIxZWM1YzRifHJlYWQtd3JpdGU=",
+        "cacheableOperations": ["build", "test", "lint", "e2e"],
+        "canTrackAnalytics": false,
+        "showUsageWarnings": true
       }
     }
   },
-  "projects": {},
+  "projects": {
+    "lmbase": {
+      "tags": []
+    },
+    "demo-client-app": {
+      "tags": []
+    },
+    "demo-client-app-e2e": {
+      "tags": [],
+      "implicitDependencies": ["demo-client-app"]
+    }
+  },
   "workspaceLayout": {
-    "appsDir": "packages",
+    "appsDir": "demo",
     "libsDir": "packages"
   }
 }

@@ -1,7 +1,143 @@
 {
   "version": 1,
-  "projects": {},
+  "projects": {
+    "lmbase": {
+      "root": "packages/lmbase",
+      "sourceRoot": "packages/lmbase/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:lint",
+          "options": {
+            "linter": "eslint",
+            "tsConfig": [
+              "packages/lmbase/tsconfig.lib.json",
+              "packages/lmbase/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!packages/lmbase/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "packages/lmbase/jest.config.js",
+            "tsConfig": "packages/lmbase/tsconfig.spec.json",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "builder": "@nrwl/node:package",
+          "options": {
+            "outputPath": "dist/packages/lmbase",
+            "tsConfig": "packages/lmbase/tsconfig.lib.json",
+            "packageJson": "packages/lmbase/package.json",
+            "main": "packages/lmbase/src/index.ts",
+            "assets": ["packages/lmbase/*.md"]
+          }
+        }
+      }
+    },
+    "demo-client-app": {
+      "root": "demo/demo-client-app",
+      "sourceRoot": "demo/demo-client-app",
+      "projectType": "application",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/next:build",
+          "options": {
+            "root": "demo/demo-client-app",
+            "outputPath": "dist/demo/demo-client-app"
+          },
+          "configurations": {
+            "production": {}
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/next:server",
+          "options": {
+            "buildTarget": "demo-client-app:build",
+            "dev": true
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "demo-client-app:build:production",
+              "dev": false
+            }
+          }
+        },
+        "export": {
+          "builder": "@nrwl/next:export",
+          "options": {
+            "buildTarget": "demo-client-app:build:production"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:lint",
+          "options": {
+            "linter": "eslint",
+            "tsConfig": [
+              "demo/demo-client-app/tsconfig.json",
+              "demo/demo-client-app/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!demo/demo-client-app/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "demo/demo-client-app/jest.config.js",
+            "tsConfig": "demo/demo-client-app/tsconfig.spec.json",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "demo-client-app-e2e": {
+      "root": "demo/demo-client-app-e2e",
+      "sourceRoot": "demo/demo-client-app-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "demo/demo-client-app-e2e/cypress.json",
+            "tsConfig": "demo/demo-client-app-e2e/tsconfig.e2e.json",
+            "devServerTarget": "demo-client-app:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "demo-client-app:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:lint",
+          "options": {
+            "linter": "eslint",
+            "tsConfig": ["demo/demo-client-app-e2e/tsconfig.e2e.json"],
+            "exclude": ["**/node_modules/**", "!demo/demo-client-app-e2e/**/*"]
+          }
+        }
+      }
+    }
+  },
   "cli": {
-    "defaultCollection": "@nrwl/workspace"
-  }
+    "defaultCollection": "@nrwl/next"
+  },
+  "schematics": {
+    "@nrwl/react": {
+      "application": {
+        "babel": true
+      }
+    },
+    "@nrwl/next": {
+      "application": {
+        "style": "scss",
+        "linter": "eslint"
+      }
+    }
+  },
+  "defaultProject": "demo-client-app"
 }
